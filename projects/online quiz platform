@@ -1,0 +1,119 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# ------------------ Quiz Questions ------------------
+
+questions = [
+    {
+        "question": "1. What is the capital of India?",
+        "options": ["Mumbai", "Delhi", "Chennai", "Hyderabad"],
+        "answer": "Delhi"
+    },
+    {
+        "question": "2. Which keyword is used to define a function in Python?",
+        "options": ["func", "define", "def", "function"],
+        "answer": "def"
+    },
+    {
+        "question": "3. Which data type stores True or False?",
+        "options": ["String", "Integer", "Boolean", "Float"],
+        "answer": "Boolean"
+    },
+    {
+        "question": "4. Which operator is used for multiplication?",
+        "options": ["+", "-", "*", "/"],
+        "answer": "*"
+    },
+    {
+        "question": "5. Who developed Python?",
+        "options": [
+            "James Gosling",
+            "Dennis Ritchie",
+            "Guido van Rossum",
+            "Bjarne Stroustrup"
+        ],
+        "answer": "Guido van Rossum"
+    }
+]
+
+# ------------------ Variables ------------------
+
+current_question = 0
+score = 0
+
+# ------------------ Functions ------------------
+
+def display_question():
+    question_label.config(text=questions[current_question]["question"])
+    selected_option.set(None)
+
+    for i in range(4):
+        option_buttons[i].config(text=questions[current_question]["options"][i],
+                                 value=questions[current_question]["options"][i])
+
+def next_question():
+    global current_question, score
+
+    if selected_option.get() == "":
+        messagebox.showwarning("Warning", "Please select an answer.")
+        return
+
+    if selected_option.get() == questions[current_question]["answer"]:
+        score += 1
+
+    current_question += 1
+
+    if current_question < len(questions):
+        display_question()
+    else:
+        messagebox.showinfo(
+            "Quiz Completed",
+            f"Your Score: {score}/{len(questions)}"
+        )
+        root.destroy()
+
+# ------------------ GUI ------------------
+
+root = tk.Tk()
+root.title("Online Quiz Platform")
+root.geometry("500x400")
+root.resizable(False, False)
+
+title = tk.Label(root,
+                 text="Online Quiz Platform",
+                 font=("Arial", 18, "bold"))
+title.pack(pady=10)
+
+question_label = tk.Label(root,
+                          text="",
+                          font=("Arial", 13),
+                          wraplength=450,
+                          justify="left")
+question_label.pack(pady=20)
+
+selected_option = tk.StringVar()
+selected_option.set("")
+
+option_buttons = []
+
+for i in range(4):
+    rb = tk.Radiobutton(root,
+                        text="",
+                        variable=selected_option,
+                        value="",
+                        font=("Arial", 12))
+    rb.pack(anchor="w", padx=60)
+    option_buttons.append(rb)
+
+next_btn = tk.Button(root,
+                     text="Next",
+                     command=next_question,
+                     width=15,
+                     bg="green",
+                     fg="white",
+                     font=("Arial", 11))
+next_btn.pack(pady=20)
+
+display_question()
+
+root.mainloop()

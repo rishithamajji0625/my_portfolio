@@ -1,0 +1,55 @@
+import time
+import winsound
+from datetime import datetime
+
+# Alarm tone frequencies
+tones = {
+    "1": 1000,
+    "2": 1500,
+    "3": 2000
+}
+
+print("========== ALARM CLOCK ==========")
+
+alarm_time = input("Enter Alarm Time (HH:MM:SS in 24-hour format): ")
+
+print("\nChoose Alarm Tone")
+print("1. Normal")
+print("2. Medium")
+print("3. High")
+
+tone_choice = input("Enter choice (1-3): ")
+
+frequency = tones.get(tone_choice, 1000)
+
+print("\nAlarm has been set!")
+
+while True:
+    current_time = datetime.now().strftime("%H:%M:%S")
+    print("Current Time:", current_time, end="\r")
+
+    if current_time == alarm_time:
+        print("\n\nALARM! Wake Up!")
+
+        for i in range(5):
+            winsound.Beep(frequency, 1000)
+
+        snooze = input("\nDo you want to snooze? (yes/no): ").lower()
+
+        if snooze == "yes":
+            minutes = int(input("Snooze for how many minutes? "))
+            snooze_seconds = minutes * 60
+
+            print("Snoozing...")
+
+            time.sleep(snooze_seconds)
+
+            print("\nSnooze Over!")
+
+            for i in range(5):
+                winsound.Beep(frequency, 1000)
+
+        print("\nAlarm Finished.")
+        break
+
+    time.sleep(1)
